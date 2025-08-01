@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+  import { motion, AnimatePresence } from 'framer-motion';
+
 
 
 const ChatInterface = ({botConfig, chatMessages, setChatMessages, logs, setLogs}) => {
@@ -53,18 +55,40 @@ const ChatInterface = ({botConfig, chatMessages, setChatMessages, logs, setLogs}
 
   return (
 
-    <div className='bg-white shadow-xl rounded-2xl p-6 w-full max-w-xl'>
-      <h2 className='text-xl font-bold mb-4 text-green-600'>Chat</h2>
-      <div className='h-64 overflow-y-auto border rounded-md p-4 mb-4 bg-gray-50'>
-        {chatMessages.map((message, index) => (
-            <div key={index} className='mb-2'>
-              <strong className={message.role === 'user' ? 'text-gray-800' : 'text-blue-600'}>
-              {message.role === 'user' ? 'You' : botConfig.botName}:
-              </strong>{' '}
-              {message.content}
-            </div>
-        ))}
+    <div className=' flex flex-col justify-center max-w-3xl mx-auto p-8 backdrop-blur-2xl bg-white shadow-xl rounded-2xl'>
+      <h2 className='text-xl font-bold mb-4 text-green-500'>Chat</h2>
+      <div className='h-[400px] overflow-y-auto border rounded-md p-4 mb-4 bg-gray-50 space-y-2'>
+
+      <div className='flex flex-col gap-2'>
+
+<AnimatePresence>
+  {chatMessages.map((message, index) => (
+    <motion.div
+      key={index}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+    >
+      <div
+        className={`max-w-xs px-4 py-2 rounded-lg shadow-md text-sm ${
+          message.role === 'user'
+            ? 'bg-green-100 text-right text-gray-900 rounded-br-none'
+            : 'bg-blue-100 text-left text-gray-900 rounded-bl-none'
+        }`}
+      >
+        <strong className="block text-xs mb-1">
+          {message.role === 'user' ? 'You' : botConfig.botName}
+        </strong>
+        <p>{message.content}</p>
       </div>
+    </motion.div>
+  ))}
+</AnimatePresence>
+
+  </div>
+</div>
       <div className='flex gap-2'>
         <input
           type='text'
