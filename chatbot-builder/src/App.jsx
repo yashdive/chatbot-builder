@@ -1,9 +1,33 @@
-import React from 'react'
-
+import React, { useState } from 'react'
+import BotConfigForm from './components/BotConfigForm'
+import ChatInterface from './components/ChatInterface';
+import LogPanel from './components/LogPanel';
 const App = () => {
+
+  // This is the main application component
+  // It will render the BotConfigForm component
+  const [botConfig, setBotConfig] = useState({});
+  const [chatMessages, setChatMessages] = useState([]);
+  const [logs, setLogs] = useState([]);
+  
+
+  const handleSave = (config) => {
+    console.log('Bot configuration saved:', config);
+    setBotConfig(config);
+  }
+
   return (
     <div>
-      <h1 className="text-red-200 text-3xl font-bold shadow-2xl">Hello world!</h1>
+      <BotConfigForm onSave={handleSave} />
+      {botConfig && (
+        <><ChatInterface
+            botConfig={botConfig}
+            chatMessages={chatMessages}
+            setChatMessages={setChatMessages}
+            logs={logs}
+            setLogs={setLogs} />
+            <LogPanel logs={logs} /></>
+      )}
     </div>
   )
 }
