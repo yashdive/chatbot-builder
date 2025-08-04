@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 
 const ChatInterface = ({
   botConfig,
@@ -153,7 +154,7 @@ const ChatInterface = ({
                     <strong className="block text-xs mb-1">
                       {message.role === "user" ? "You" : botConfig.botName}
                     </strong>
-                    <p>{message.content}</p>
+                    <ReactMarkdown>{message.content}</ReactMarkdown>
                   </div>
                 </motion.div>
               ))}
