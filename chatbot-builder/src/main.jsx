@@ -5,7 +5,7 @@ import App from './App.jsx'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
 createRoot(document.getElementById('root')).render(
-  <Router>
+  <Router basename='"/chatbot-builder"'>
     <App />
   </Router>,
 )
