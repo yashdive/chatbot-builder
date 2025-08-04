@@ -4,6 +4,7 @@ import { Brain } from 'lucide-react';
 
 const Spinner = ({message = "Setting up your bot's brain..."}) => {
 
+  //spinner component for loading effect
     const tips = [
   'Spinning up neurons...',
   'Teaching your bot grammar...',

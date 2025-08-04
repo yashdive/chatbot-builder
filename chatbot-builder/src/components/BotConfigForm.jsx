@@ -15,7 +15,7 @@ const BotConfigForm = ({onSave}) => {
     const navigate = useNavigate();
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Here you would typically handle the form submission,
+        // Here you would  handle the form submission,
         // such as sending the data to a server or updating the state in a parent component.
         onSave({ botName, persona, model });
     }

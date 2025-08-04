@@ -20,7 +20,6 @@ const ChatInterface = ({
   const chatContainerRef = useRef(null);
 
   useEffect(() => {
-    // Scroll to the bottom of the chat when new messages are added
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
         chatContainerRef.current.scrollHeight;
@@ -63,7 +62,6 @@ const ChatInterface = ({
         data?.candidates?.[0]?.content?.parts?.[0]?.text ||
         "No response from Gemini.";
 
-      // Add empty bot message to be filled gradually
 
       const botResponse = {
         role: "assistant",

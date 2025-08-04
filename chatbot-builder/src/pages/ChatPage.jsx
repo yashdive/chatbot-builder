@@ -5,6 +5,9 @@ import LogPanel from '../components/LogPanel'
 import { ClipboardList } from 'lucide-react'
 
 const ChatPage = ({ botConfig, chatMessages, setChatMessages, logs, setLogs }) => {
+
+    //this is the Chat Page which will render the bot chat interface and the log panel components
+
   const [showLogs, setShowLogs] = useState(false)
 
   return (
@@ -17,7 +20,6 @@ const ChatPage = ({ botConfig, chatMessages, setChatMessages, logs, setLogs }) =
           showLogs ? 'w-80' : 'w-10'
         }`}
       >
-        {/* Icon toggle button */}
         <button
           className="absolute -right-5 top-4 z-40 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-r-md shadow transitio cursor-pointer"
           onClick={() => setShowLogs((prev) => !prev)}
@@ -36,7 +38,6 @@ const ChatPage = ({ botConfig, chatMessages, setChatMessages, logs, setLogs }) =
         )}
       </div>
 
-      {/* Chat Interface shifted */}
       <div
         className={`transition-all duration-500 ease-in-out ${
           showLogs ? 'ml-80' : 'ml-10'

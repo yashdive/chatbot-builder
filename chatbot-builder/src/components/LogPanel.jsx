@@ -1,4 +1,7 @@
 const LogPanel = ({ logs }) => {
+
+  // This component will handle the log panel
+  // It will display the last five logs
   return (
    <div className="p-6 h-full flex flex-col">
   <div className="space-y-4 overflow-y-auto pr-2">

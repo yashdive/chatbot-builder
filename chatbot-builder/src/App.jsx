@@ -9,8 +9,9 @@ import ChatPage from "./pages/ChatPage";
 
 
 const App = () => {
+  
   // This is the main application component
-  // It will render the BotConfigForm component
+  // It will render the BotConfigPage and the chatPage 
   
   const [botConfig, setBotConfig] = useState({});
   const [chatMessages, setChatMessages] = useState([]);

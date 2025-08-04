@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 
 const Navbar = () => {
 
+  //This is the navbar component which contains the logo
+
   const navigate = useNavigate()
   return (
       <div className='fixed z-5 w-full backdrop-blur-2xl flex justify-between items-center py-3 px-4 sm:px-20 xl:px-32'>
