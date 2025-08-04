@@ -3,6 +3,11 @@ import BotConfigForm from "./components/BotConfigForm";
 import ChatInterface from "./components/ChatInterface";
 import LogPanel from "./components/LogPanel";
 import Navbar from "./components/Navbar";
+import { Route, Routes } from "react-router-dom";
+import BotConfigPage from "./pages/BotConfigPage";
+import ChatPage from "./pages/ChatPage";
+
+
 const App = () => {
   // This is the main application component
   // It will render the BotConfigForm component
@@ -11,15 +16,26 @@ const App = () => {
   const [chatMessages, setChatMessages] = useState([]);
   const [logs, setLogs] = useState([]);
 
-  const handleSave = (config) => {
-    console.log("Bot configuration saved:", config);
-    setBotConfig(config);
-  };
 
   return (
     <div className="bg-[url(/gradientBackground.png)] bg-cover bg-repeat-y bg-top min-h-screen w-full">
+      
+    <Routes>
+      <Route path="/" element={<BotConfigPage onSave={setBotConfig} />} />
+      <Route path="/chat" element={<ChatPage   botConfig={botConfig}
+            chatMessages={chatMessages}
+            setChatMessages={setChatMessages}
+            logs={logs}
+            setLogs={setLogs}/>} />
+    </Routes>
+    </div>
+  );
+};
+
+export default App;
+
+{/* <div className="bg-[url(/gradientBackground.png)] bg-cover bg-repeat-y bg-top min-h-screen w-full">
       <Navbar />
-      <BotConfigForm onSave={handleSave} />
       {botConfig && (
         <>
           <ChatInterface
@@ -32,8 +48,4 @@ const App = () => {
           <LogPanel logs={logs} />
         </>
       )}
-    </div>
-  );
-};
-
-export default App;
+    </div> */}
