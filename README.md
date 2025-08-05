@@ -12,9 +12,6 @@ An interactive, full-stack chatbot application that allows users to configure th
 
 ## Screenshots
 
-### 🔧 Bot Configuration Page
-<img src="screenshots/config-page.png" alt="BotConfigForm UI" width="600" />
-
 ### 💬 Chat Interface + Logs
 <img src="screenshots/chat-page.png" alt="Chat Interface and Logs" width="600" />
 
