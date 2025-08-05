@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
+// Main ChatInterface component
 const ChatInterface = ({
   botConfig,
   chatMessages,
@@ -10,16 +11,15 @@ const ChatInterface = ({
   logs,
   setLogs,
 }) => {
-  // This component will handle the chat interface
-  // It will display the chat messages and allow the user to send messages
+  // API endpoint and key from environment variables
   const GEMINI_API_URL = import.meta.env.VITE_GEMINI_API_URL;
   const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(""); // User input state
+  const [isBotTyping, setIsBotTyping] = useState(false); // Bot typing indicator
 
-  const [isBotTyping, setIsBotTyping] = useState(false);
+  const chatContainerRef = useRef(null); // Ref for chat scroll
 
-  const chatContainerRef = useRef(null);
-
+  // Scroll to bottom when chatMessages change
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
@@ -27,28 +27,29 @@ const ChatInterface = ({
     }
   }, [chatMessages]);
 
+  // Handle sending a message
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    // Step 1: Add user message
+    // Step 1: Add user message to chat
     const userMessage = { role: "user", content: input };
     setChatMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsBotTyping(true);
 
     try {
-      // Step 2: Prepare payload for Gemini
+      // Step 2: Prepare prompt for Gemini API
+      const fullPrompt = `You are a helpful AI chatbot named ${botConfig.botName}. You are acting as a ${botConfig.persona}. Answer the following: ${input}`;
 
-    const fullPrompt = `You are a helpful AI chatbot named ${botConfig.botName}. You are acting as a ${botConfig.persona}. Answer the following: ${input}`;
+      const payload = {
+        contents: [
+          {
+            parts: [{ text: fullPrompt }],
+          },
+        ],
+      };
 
-    const payload = {
-      contents: [
-        {
-          parts: [{ text: fullPrompt }],
-        },
-      ],
-    };
-
+      // Call Gemini API
       const res = await fetch(GEMINI_API_URL + GEMINI_API_KEY, {
         method: "POST",
         headers: {
@@ -59,11 +60,12 @@ const ChatInterface = ({
 
       const data = await res.json();
 
+      // Extract bot response text
       const text =
         data?.candidates?.[0]?.content?.parts?.[0]?.text ||
         "No response from Gemini.";
 
-
+      // Add empty bot message to chat (for typing effect)
       const botResponse = {
         role: "assistant",
         content: "",
@@ -71,6 +73,7 @@ const ChatInterface = ({
 
       setChatMessages((prev) => [...prev, botResponse]);
 
+      // Simulate typing effect for bot response
       let currentIndex = 0;
       const typingInterval = setInterval(() => {
         currentIndex++;
@@ -86,14 +89,14 @@ const ChatInterface = ({
           clearInterval(typingInterval);
           setIsBotTyping(false);
         }
-      }, 20); // Typing speed (adjust as needed)
+      }, 20); // Typing speed
 
-      // Step 3: Update logs
+      // Step 3: Update logs (keep last 5)
       const now = new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
         hour12: true
-      })
+      });
 
       const newLog = {
         time: now,
@@ -102,8 +105,9 @@ const ChatInterface = ({
         response: text.length > 25 ? text.slice(0, 25) + "..." : text,
       };
 
-      setLogs((prev) => [newLog, ...prev.slice(0, 4)]); // keep only last 5
+      setLogs((prev) => [newLog, ...prev.slice(0, 4)]);
     } catch (error) {
+      // Handle API error
       console.error("Gemini error:", error);
 
       setChatMessages((prev) => [
@@ -116,6 +120,7 @@ const ChatInterface = ({
     setInput("");
   };
 
+  // Handle Enter key for sending message
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) handleSend();
   };
@@ -123,10 +128,12 @@ const ChatInterface = ({
   return (
     <div className="min-h-screen flex flex-col justify-center max-w-3xl mx-auto p-8">
       <div className="backdrop-blur-2xl bg-white shadow-xl rounded-2xl p-8">
+        {/* Chat header */}
         <h2 className="text-xl font-bold mb-4 text-green-500 flex items-center">
           <MessageSquare className="mr-2" />
           Let's Talk
         </h2>
+        {/* Chat messages container */}
         <div
           ref={chatContainerRef}
           className="h-[400px] overflow-y-auto border rounded-md p-4 mb-4 bg-gray-50 space-y-2"
@@ -151,9 +158,11 @@ const ChatInterface = ({
                         : "bg-blue-100 text-left text-gray-900 rounded-bl-none"
                     }`}
                   >
+                    {/* Message sender */}
                     <strong className="block text-xs mb-1">
                       {message.role === "user" ? "You" : botConfig.botName}
                     </strong>
+                    {/* Message content (supports markdown) */}
                     <ReactMarkdown>{message.content}</ReactMarkdown>
                   </div>
                 </motion.div>
@@ -161,6 +170,7 @@ const ChatInterface = ({
             </AnimatePresence>
           </div>
         </div>
+        {/* Input and send button */}
         <div className="flex gap-2">
           <input
             type="text"
